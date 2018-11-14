@@ -225,26 +225,27 @@
             if(min < 10){ min = '0'+min; }
             if(sec < 10){ sec = '0'+sec; }
             $('#currentDuration').html(min+':'+sec);
-        });
 
-        INTERVAL = setInterval(function(){
-            starDuraton = starDuraton + 1;
-            SOUND_DURATION = starDuraton;
+            INTERVAL = setInterval(function(){
+                starDuraton = starDuraton + 1;
+                SOUND_DURATION = starDuraton;
 
-            var min = parseInt(starDuraton/60);
-            var sec = starDuraton-(min*60);
-            if(min < 10){ min = '0'+min; }
-            if(sec < 10){ sec = '0'+sec; }
-            $('#currentDuration').html(min+':'+sec);
+                var min = parseInt(starDuraton/60);
+                var sec = starDuraton-(min*60);
+                if(min < 10){ min = '0'+min; }
+                if(sec < 10){ sec = '0'+sec; }
+                $('#currentDuration').html(min+':'+sec);
 
-            if(duration === starDuraton){
-                clearInterval(INTERVAL);
-            }
+                if(duration === starDuraton){
+                    clearInterval(INTERVAL);
+                }
 
-            progress = parseInt((starDuraton/duration)*100);
-            SOUND_PROGRESS = progress;
-            $('#progressTime').css({width:progress+'%', transition: 'all 1s linear'})
-        },1000);
+                progress = parseInt((starDuraton/duration)*100);
+                SOUND_PROGRESS = progress;
+                $('#progressTime').css({width:progress+'%', transition: 'all 1s linear'})
+            },1000);
+        }, 100);
+
 
     }
 
