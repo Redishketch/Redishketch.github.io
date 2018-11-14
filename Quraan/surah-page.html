@@ -207,24 +207,25 @@
     function getAudioTime(_progress, _duration) {
 
         clearInterval(INTERVAL);
-        var duration = parseInt(SOUND.duration);
 
-        var min = parseInt(duration/60);
-        var sec = duration-(min*60);
-        if(min < 10){ min = '0'+min; }
-        if(sec < 10){ sec = '0'+sec; }
-        $('#audioDuration').html(min+':'+sec);
+        setTimeout(function(){
+            var duration = parseInt(SOUND.duration);
+            var min = parseInt(duration/60);
+            var sec = duration-(min*60);
+            if(min < 10){ min = '0'+min; }
+            if(sec < 10){ sec = '0'+sec; }
+            $('#audioDuration').html(min+':'+sec);
 
-        var progress = _progress;
-        var starDuraton = _duration;
-        $('#progressTime').css({width:progress+'%', transition: 'none'});
+            var progress = _progress;
+            var starDuraton = _duration;
+            $('#progressTime').css({width:progress+'%', transition: 'none'});
 
-        var min = parseInt(starDuraton/60);
-        var sec = starDuraton-(min*60);
-        if(min < 10){ min = '0'+min; }
-        if(sec < 10){ sec = '0'+sec; }
-        $('#currentDuration').html(min+':'+sec);
-
+            var min = parseInt(starDuraton/60);
+            var sec = starDuraton-(min*60);
+            if(min < 10){ min = '0'+min; }
+            if(sec < 10){ sec = '0'+sec; }
+            $('#currentDuration').html(min+':'+sec);
+        });
 
         INTERVAL = setInterval(function(){
             starDuraton = starDuraton + 1;
