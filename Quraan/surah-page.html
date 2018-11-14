@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="website-name">
+                    <h1 class="web-text">The Nobel Quran</h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="nav-bar">
+                        <ul>
+                            <li><a href="index.html">The Quran</a></li>
+                            <li><a href="#">Hadith</a></li>
+                            <li><a href="#">Salah</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="body-0">
+    <div class="container">
+        <div class="body-0-content">
+            <div class="col-md-12">
+                <div class="body-0-h1 surahName">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="full-sura">
+                <div class="container">
+                    <div class="full-sura-content">
+                        <div class="col-md-12">
+                            <h1 class="bismillah">﷽</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-default" onclick="playThisAudio(0)">Play All</button>
+            <button class="btn btn-default" onclick="stopAll()">Stop Playing</button>
+        </div>
+        <div class="col-md-12">
+            <div class="verse verse-btn">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="music-player">
+    <div class="sura-name">
+        <div class="col-xs-12">
+            <div class="music-box">
+                <div class="col-md-3 text-center">
+                    <div class="music-btn ">
+                        <button class="btn" id="_preVerse" onclick=" PreVerse()" ><img src="img/previous.png" alt=""></button>
+                        <button class="btn " id="togglePlay" onclick="togglePlay()"></button>
+                        <button class="btn" id="nextVerse" onclick="nextThisAudio();"><img src="img/next.png" alt=""></button>
+                    </div>
+                </div>
+                <div class="col-md-7 text-center">
+                    <p class="text-center play-sura_Name"></p>
+                    <div class="time-bar">
+                        <div class="run-time" id="progressTime"></div>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center">
+                    <div class="time-dur">
+                        <p> <span id="currentDuration">00:00</span>/<span id="audioDuration">00:00</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+<script>
+    var SOUND;
+    var SOUND_ID;
+    var SOUND_PROGRESS;
+    var SOUND_DURATION;
+    var INTERVAL;
+
+    $(function () {
+
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var c = url.searchParams.get("slug");
+        console.log(c);
+
+        $.ajax({
+            url: "http://localhost/projects/quran.io/server/singleSurah.php",
+            type: "post",
+            data: {slug: c},
+            success: function (response) {
+                console.log(response);
+                var res = JSON.parse(response);
+
+                var surahHtml = `<h1>` + res.title + `</h1>`;
+                $('.surahName').html(surahHtml);
+
+                var palySuraName =`<p>`+res.title+`</p>`;
+                $('.play-sura_Name').html(palySuraName);
+
+
+                for (var i = 0; i < res.verses.length; i++) {
+                    var eachVerse = res.verses[i];
+                    var versehtml = `<button class="btn btn-default btn-verse trigger` + i + `" onclick="playThisAudio(` + i + `)">` + (parseInt(i) + 1) + ` <audio id="play` + i + `" style="display: none;" src="` + eachVerse + `" controls></button>`;
+                    $('.verse-btn').append(versehtml)
+
+                }
+            }
+        });
+
+    });
+
+    function stopAll() {
+        hideMusicPlayer();
+        $('.btn-verse').removeClass('btn-success').addClass('btn-default');
+        var sounds = document.getElementsByTagName('audio');
+        for (i = 0; i < sounds.length; i++) {
+            sounds[i].pause();
+            sounds[i].currentTime = 0;
+        }
+    }
+
+    function playThisAudio(id) {
+        stopAll();
+        openMusicPlayer();
+
+        SOUND = document.getElementById('play' + id);
+        SOUND.play();
+        SOUND_ID= id;
+        getAudioTime(0,0);
+        $('.trigger' + id).removeClass('btn-default').addClass('btn-success');
+        $("#play" + id).on("ended", function () {
+            playThisAudio(id + 1);
+
+
+        });
+
+    }
+
+    function nextThisAudio() {
+        playThisAudio( SOUND_ID+ 1)
+
+    }
+
+    function PreVerse() {
+        playThisAudio( SOUND_ID - 1)
+
+    }
+
+    function openMusicPlayer() {
+        $('#togglePlay').html('<img src="img/pause.png" alt="">');
+        $('.music-player').show();
+    }
+
+    function hideMusicPlayer() {
+        $('.music-player').hide();
+
+
+    }
+    function togglePlay() {
+        if (SOUND.paused) {
+            SOUND.play();
+            $('#togglePlay').html('<img src="img/pause.png" alt="">');
+            getAudioTime(SOUND_PROGRESS,SOUND_DURATION);
+        } else {
+            SOUND.pause();
+            $('#togglePlay').html('<img src="img/play.png" alt="">');
+            clearInterval(INTERVAL);
+        }
+
+    }
+    // function preVerse() {
+    //     playThisAudio(id - 1);
+    //     console.log(preVerse());
+    // }
+
+
+    function getAudioTime(_progress, _duration) {
+
+        clearInterval(INTERVAL);
+        var duration = parseInt(SOUND.duration);
+
+        var min = parseInt(duration/60);
+        var sec = duration-(min*60);
+        if(min < 10){ min = '0'+min; }
+        if(sec < 10){ sec = '0'+sec; }
+        $('#audioDuration').html(min+':'+sec);
+
+        var progress = _progress;
+        var starDuraton = _duration;
+        $('#progressTime').css({width:progress+'%', transition: 'none'});
+
+        var min = parseInt(starDuraton/60);
+        var sec = starDuraton-(min*60);
+        if(min < 10){ min = '0'+min; }
+        if(sec < 10){ sec = '0'+sec; }
+        $('#currentDuration').html(min+':'+sec);
+
+
+        INTERVAL = setInterval(function(){
+            starDuraton = starDuraton + 1;
+            SOUND_DURATION = starDuraton;
+
+            var min = parseInt(starDuraton/60);
+            var sec = starDuraton-(min*60);
+            if(min < 10){ min = '0'+min; }
+            if(sec < 10){ sec = '0'+sec; }
+            $('#currentDuration').html(min+':'+sec);
+
+            if(duration === starDuraton){
+                clearInterval(INTERVAL);
+            }
+
+            progress = parseInt((starDuraton/duration)*100);
+            SOUND_PROGRESS = progress;
+            $('#progressTime').css({width:progress+'%', transition: 'all 1s linear'})
+        },1000);
+
+    }
+
+</script>
+</html>

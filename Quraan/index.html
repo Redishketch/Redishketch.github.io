@@ -6,8 +6,95 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+    <link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<h1 style="width: 100%; text-align: center">Quran</h1>
+<div class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="website-name">
+                    <h1 class="web-text">The Nobel Quran</h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="nav-bar">
+                        <ul>
+                            <li><a href="index.html">The Quran</a></li>
+                            <li><a href="#">Hadith</a></li>
+                            <li><a href="#"></a>Salah</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="body-0">
+    <div class="container">
+        <div class="body-0-content">
+            <div class="col-md-12">
+                <div class="body-0-h1">
+                    <h1>SURAHS (CHAPTERS)</h1>
+                </div>
+                <div class="surah-body">
+                    <div class="col-md-4">
+                        <ul class="_surahList1">
+
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="_surahList2">
+
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="_surahList3">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
+<script>
+    $(function () {
+        $.ajax({
+            url: "http://localhost/projects/quran.io/server/surahList.json",
+            type: "get",
+            success: function (res) {
+
+                for (var i = 0; i < res.length; i++) {
+                    var eachSurah = res [i];
+                    var html = `<li>
+                                    <a href="surah-page.html?slug=` + eachSurah.slug + `">
+                                    <div class="col-xs-2">` + eachSurah.id + `</div>
+                                    <div class="col-xs-10">` + eachSurah.title + `</div>
+                                    </a>
+                                  </li>`;
+                    if (i < 38) {
+                        $('._surahList1').append(html)
+                    }
+                    else if (i < 76) {
+                        $('._surahList2').append(html)
+                    }
+                    else {
+                        $('._surahList3').append(html)
+                    }
+                }
+            }
+        })
+
+    })
+
+</script>
 </html>
