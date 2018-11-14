@@ -72,7 +72,7 @@
             url:"https://raw.githubusercontent.com/Redishketch/quran/master/server/surahList.json",
             type:"get",
             success: function (res) {
-
+                res = JSON.parse(res);
                 for(var i=0;i<res.length;i++){
                     var eachSurah = res [i];
                     var html = `<li>
