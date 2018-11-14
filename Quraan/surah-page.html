@@ -113,12 +113,12 @@
         console.log(c);
 
         $.ajax({
-            url: "http://localhost/projects/quran.io/server/singleSurah.php",
-            type: "post",
-            data: {slug: c},
-            success: function (response) {
-                console.log(response);
-                var res = JSON.parse(response);
+            url: "https://raw.githubusercontent.com/Redishketch/quran/master/APP/surah/"+c+"abasa/index.json",
+            type: "get",
+            // data: {slug: c},
+            success: function (res) {
+                // console.log(response);
+                // var res = JSON.parse(response);
 
                 var surahHtml = `<h1>` + res.title + `</h1>`;
                 $('.surahName').html(surahHtml);
