@@ -10,8 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Unlock" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-
-    <title>Document</title>
+    <title>Ghost Hunter</title>
 </head>
 <body>
 <div class="menu" id="main-Menu">
@@ -32,47 +31,92 @@
 </div>
 
 <div class="game" onclick="play()" id="gamePlay">
-    <div class='a' onclick="clickMe()"></div>
     <div class="count-down">
         <div class="coin"></div>
         <span class="time" id="countdowntimer"></span></div>
     <div class="in-game-menu" id="returnMainMenu" onclick="returnMenu()">Main menu</div>
+
+
 </div>
 
 <audio id="fire" src="auido/fire.mp3"></audio>
 </body>
 <script>
-    let win = 0;
-    let timeleft = 30;
-    let downloadTimer;
+    var win = 0;
+    var timeleft = 30;
+    var downloadTimer;
+    var failcount = 0;
+    var ghostInterval = {};
+
     $(document).ready(function () {
         inItValues();
+        $('.game').mouseup(function (event) {
+            var trigger = $(event.target)
+            if (trigger.hasClass('ghost')) {
+
+            } else {
+                if (failcount < 4) {
+                    failcount++
+                } else {
+                    failcount = 0;
+                    appendGhost()
+                }
+            }
+        })
 
     });
+
+    function appendGhost() {
+        let ghostCount = $('.ghost').length;
+        var newq = makeNewPosition();
+        let ghost = '<div class="a ghost ghost_' + ghostCount + '" data-id="' + ghostCount + '" style="top: ' + newq[0] + 'px;left: ' + newq[1] + 'px"></div>'
+        $('.game').append(ghost);
+
+        var newq = makeNewPosition();
+
+        $('.ghost_' + ghostCount).animate({top: newq[0], left: newq[1]}, 500, function () {
+        });
+        ghostInterval[ghostCount] = setInterval(function () {
+            var newq = makeNewPosition();
+
+            $('.ghost_' + ghostCount).animate({top: newq[0], left: newq[1]}, 500, function () {
+            });
+            $('.ghost_' + ghostCount).click(function () {
+                clearInterval(ghostInterval[ghostCount]);
+                delete ghostInterval[ghostCount];
+                $('.ghost_' + ghostCount).remove();
+                clickMe();
+            });
+        }, 500);
+    }
+
     function startGame() {
+        $('.ghost').remove();
+        appendGhost();
         win = 0;
         timeleft = 30;
         $('#main-Menu').hide();
         $('#gamePlay').show();
-        animateDiv('.a');
         timer();
     }
+
     function resumeGame() {
         win = 0;
         $('#main-Menu').hide();
         $('#gamePlay').show();
-        animateDiv('.a');
+        // animateDiv('.a');
         timer();
     }
+
     function returnMenu() {
         win = 1;
         $('#main-Menu').show();
         $('#gamePlay').hide();
-        animateDiv('.a');
         clearInterval(downloadTimer);
         var show_rsm = '<p onclick="resumeGame()">Resume</p>';
         $('#resume').html(show_rsm);
     }
+
     function makeNewPosition() {
 
         var h = $(window).height() - 100;
@@ -84,41 +128,32 @@
         return [nh, nw]
 
     }
-    function animateDiv(myclass) {
-        var newq = makeNewPosition();
-        $(myclass).animate({top: newq[0], left: newq[1]}, 400, function () {
-            if (win === 0) {
-                console.log('running');
-                animateDiv(myclass);
-            } else {
-                console.log('stop');
-            }
-        });
 
-    };
     function clickMe() {
+        let ghostCount = $('.ghost').length;
+        if (ghostCount === 0) {
+            $('.ghost').remove();
+            swal({
+                title: "You Win!",
+                text: "You killed the ghost!",
+                icon: "success",
+                buttons: ["Main Menu", "Play Again"],
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            }).then(function (res) {
+                if (res) {
+                    console.log('Play again');
+                    startGame();
+                } else {
+                    $('#main-Menu').show();
+                    $('#gamePlay').hide();
+                }
+            });
+        }
         clearInterval(downloadTimer);
         setValues();
-        win = 1;
-        swal({
-            title: "You Win!",
-            text: "You killed the ghost!",
-            icon: "success",
-            buttons: ["Main Menu", "Play Again"],
-            closeOnClickOutside: false,
-            closeOnEsc: false,
-        }).then(function (res) {
-            if (res) {
-                console.log('Play again');
-                startGame();
-            } else {
-                $('#main-Menu').show();
-                $('#gamePlay').hide();
-            }
-        });
-
-
     }
+
     function setValues() {
         if (localStorage.getItem('HighScore') === null) {
             localStorage.setItem('HighScore', timeleft);
@@ -136,9 +171,8 @@
             localStorage.setItem('coins', newCoins);
         }
         inItValues();
-
-
     }
+
     function inItValues() {
         var HighScore = 0;
         var coins = 0;
@@ -158,6 +192,7 @@
 
 
     }
+
     function timer() {
         document.getElementById("countdowntimer").textContent = timeleft;
         downloadTimer = setInterval(function () {
@@ -165,6 +200,7 @@
             document.getElementById("countdowntimer").textContent = timeleft;
             if (timeleft === 0) {
                 clearInterval(downloadTimer);
+                $('.ghost').remove();
                 swal({
                     title: "You lose!",
                     text: "You did not kill the ghost!",
@@ -184,6 +220,8 @@
             }
         }, 1000);
     }
+
+
     function play() {
         var audio = document.getElementById("fire");
         if (audio.paused === false) {
@@ -192,5 +230,6 @@
         }
         audio.play();
     }
+
 </script>
 </html>
