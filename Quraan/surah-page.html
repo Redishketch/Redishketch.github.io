@@ -67,7 +67,6 @@
         </div>
     </div>
 </div>
-
 <div class="music-player">
     <div class="sura-name">
         <div class="col-xs-12">
@@ -95,8 +94,6 @@
     </div>
 
 </div>
-
-
 </body>
 <script>
     var SOUND;
@@ -110,28 +107,34 @@
         var url_string = window.location.href;
         var url = new URL(url_string);
         var c = url.searchParams.get("slug");
-        console.log(c);
 
         $.ajax({
-            url: "https://raw.githubusercontent.com/Redishketch/quran/master/APP/surah/"+c+"/index.json",
+            url: "http://localhost/quran/APP/surah/"+c+"/index.json",
             type: "get",
             // data: {slug: c},
             success: function (res) {
-                res = JSON.parse(res);
+//                res = JSON.parse(res);
                 // console.log(response);
                 // var res = JSON.parse(response);
 
-                var surahHtml = `<h1>` + res.title + `</h1>`;
+                var surahHtml = '<h1>' + res.title + '</h1>';
                 $('.surahName').html(surahHtml);
 
-                var palySuraName =`<p>`+res.title+`</p>`;
+                var palySuraName ='<p>'+res.title+'</p>';
                 $('.play-sura_Name').html(palySuraName);
 
 
                 for (var i = 0; i < res.verses.length; i++) {
                     var eachVerse = res.verses[i];
-                    var versehtml = `<button class="btn btn-default btn-verse trigger` + i + `" onclick="playThisAudio(` + i + `)">` + (parseInt(i) + 1) + ` <audio id="play` + i + `" style="display: none;" src="` + eachVerse + `" controls></button>`;
-                    $('.verse-btn').append(versehtml)
+
+                    if(res.arabic !== undefined){
+                        var contents = '<span><span>'+res.arabic[i]+'</span> <br><span>'+res.english[i]+'</span></span>';
+                        var versehtml = '<button class="btn btn-default btn-verse trigger' + i + '" onclick="playThisAudio(' + i + ')">' + contents + ' <audio id="play' + i + '" style="display: none;" src="' + eachVerse + '" controls></button>';
+                        $('.verse-btn').append(versehtml)
+                    }else{
+                        var versehtml = '<button class="btn btn-default btn-verse trigger' + i + '" onclick="playThisAudio(' + i + ')">' + (i+1) + ' <audio id="play' + i + '" style="display: none;" src="' + eachVerse + '" controls></button>';
+                        $('.verse-btn').append(versehtml)
+                    }
 
                 }
             }
@@ -203,7 +206,6 @@
     //     console.log(preVerse());
     // }
 
-
     function getAudioTime(_progress, _duration) {
 
         clearInterval(INTERVAL);
@@ -248,6 +250,7 @@
 
 
     }
+
 
 </script>
 </html>
