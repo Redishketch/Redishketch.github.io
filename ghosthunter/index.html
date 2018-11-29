@@ -74,20 +74,25 @@
 
         var newq = makeNewPosition();
 
-        $('.ghost_' + ghostCount).animate({top: newq[0], left: newq[1]}, 500, function () {
-        });
+        var speed = 0;
+        if($(window).width()<768){
+            speed = 200;
+        }else{
+            speed = 500;
+        }
+
+        $('.ghost_'+ghostCount).animate({ top: newq[0], left: newq[1] }, speed,   function(){});
         ghostInterval[ghostCount] = setInterval(function () {
             var newq = makeNewPosition();
 
-            $('.ghost_' + ghostCount).animate({top: newq[0], left: newq[1]}, 500, function () {
-            });
-            $('.ghost_' + ghostCount).click(function () {
+            $('.ghost_'+ghostCount).animate({ top: newq[0], left: newq[1] }, speed,   function(){});
+            $('.ghost_'+ghostCount).click(function () {
                 clearInterval(ghostInterval[ghostCount]);
                 delete ghostInterval[ghostCount];
-                $('.ghost_' + ghostCount).remove();
+                $('.ghost_'+ghostCount).remove();
                 clickMe();
             });
-        }, 500);
+        },speed);
     }
 
     function startGame() {
