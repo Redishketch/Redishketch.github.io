@@ -1,0 +1,127 @@
+body{
+  margin: 0;
+  padding: 0;
+  background-image: url("../img/1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: url("../img/gun-pointer.png"), auto !important;
+  font-family: 'Unlock', cursive;
+  overflow: hidden;
+}
+*{
+  box-sizing: border-box;
+}
+.swal-footer{
+  text-align: center;
+}
+
+.menu{
+  width: 100%;
+  text-align: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  .start-menu{
+    display: table;
+    width: auto;
+    height: auto;
+    .start{
+      font-size: 45px;
+      color: #ff3a42;
+      &:hover{
+        color: #f83a1e;
+        font-size: 50px;
+      }
+    }
+    .rsm{
+      font-size: 45px;
+      color: #ff3a42;
+      &:hover{
+        color: #f83a1e;
+        font-size: 50px;
+      }
+    }
+
+    .high{
+      font-size: 40px;
+      color: #fff;
+      text-shadow: 0 0 5px #ffc107;
+    }
+
+    .abt{
+      font-size: 20px;
+      color: white;
+    }
+    & .abt:hover{
+      color: brown;
+    }
+  }
+
+}
+
+
+
+.game{
+  width: 100%;
+  display: none;
+  margin: 0;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  .a{
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: table ;
+    background-image: url("../img/2.png");
+    position: absolute;
+  }
+  .count-down{
+    width: auto;
+    display: table;
+    font-size: 30px;
+    position: fixed;
+    top: 0;
+    right: 30px;
+    color: #fff;
+    text-shadow: 0 0 5px #ffc107;
+    @media only screen and (max-width: 450px){
+      font-size: 20px;
+    }
+    .coin{
+      width: 50px;
+      height: 50px;
+      display: table;
+      float: left;
+      margin-right: 10px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      background-image: url("../img/3.png");
+    }
+    .time{
+      margin-top: 3px;
+      float: left;
+    }
+  }
+  .in-game-menu{
+    width: auto;
+    display: table;
+    font-size: 30px;
+    position: fixed;
+    top: 0;
+    left: 30px;
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+    @media only screen and (max-width: 450px){
+      font-size: 20px;
+    }
+  }
+  & .in-game-menu:hover{
+    text-shadow: 0 0 5px #ffc107;
+  }
+}
