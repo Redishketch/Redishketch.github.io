@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Unlock" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Ghost Hunter</title>
+</head>
+<body>
+<div class="menu" id="main-Menu">
+    <div class="start-menu">
+        <div class="start" onclick="startGame()">Start</div>
+        <div class="rsm" id="resume">
+        </div>
+        <div class="high">
+            High score: <span id="__highscore"></span>
+        </div>
+        <div class="high">
+            Coins: <span id="__coin"></span>
+        </div>
+        <div class="abt">
+            About
+        </div>
+    </div>
+</div>
+
+<div class="game" onclick="play()" id="gamePlay">
+    <div class="count-down">
+        <div class="coin"></div>
+        <span class="time" id="countdowntimer"></span></div>
+    <div class="in-game-menu" id="returnMainMenu" onclick="returnMenu()">Main menu</div>
+
+
+</div>
+
+<audio id="fire" src="auido/fire.mp3"></audio>
+</body>
+<script>
+    var win = 0;
+    var timeleft = 30;
+    var downloadTimer;
+    var failcount = 0;
+    var ghostInterval = {};
+
+    $(document).ready(function () {
+        inItValues();
+        $('.game').mouseup(function (event) {
+            var trigger = $(event.target)
+            if (trigger.hasClass('ghost')) {
+
+            } else {
+                if (failcount < 4) {
+                    failcount++
+                } else {
+                    failcount = 0;
+                    appendGhost()
+                }
+            }
+        })
+
+    });
+
+    function appendGhost() {
+        let ghostCount = $('.ghost').length;
+        var newq = makeNewPosition();
+        let ghost = '<div class="a ghost ghost_' + ghostCount + '" data-id="' + ghostCount + '" style="top: ' + newq[0] + 'px;left: ' + newq[1] + 'px"></div>'
+        $('.game').append(ghost);
+
+        var newq = makeNewPosition();
+
+        var speed = 0;
+        if($(window).width()<768){
+            speed = 200;
+        }else{
+            speed = 500;
+        }
+
+        $('.ghost_'+ghostCount).animate({ top: newq[0], left: newq[1] }, speed,   function(){});
+        ghostInterval[ghostCount] = setInterval(function () {
+            var newq = makeNewPosition();
+
+            $('.ghost_'+ghostCount).animate({ top: newq[0], left: newq[1] }, speed,   function(){});
+            $('.ghost_'+ghostCount).click(function () {
+                clearInterval(ghostInterval[ghostCount]);
+                delete ghostInterval[ghostCount];
+                $('.ghost_'+ghostCount).remove();
+                clickMe();
+            });
+        },speed);
+    }
+
+    function startGame() {
+        $('.ghost').remove();
+        appendGhost();
+        win = 0;
+        timeleft = 30;
+        $('#main-Menu').hide();
+        $('#gamePlay').show();
+        timer();
+    }
+
+    function resumeGame() {
+        win = 0;
+        $('#main-Menu').hide();
+        $('#gamePlay').show();
+        // animateDiv('.a');
+        timer();
+    }
+
+    function returnMenu() {
+        win = 1;
+        $('#main-Menu').show();
+        $('#gamePlay').hide();
+        clearInterval(downloadTimer);
+        var show_rsm = '<p onclick="resumeGame()">Resume</p>';
+        $('#resume').html(show_rsm);
+    }
+
+    function makeNewPosition() {
+
+        var h = $(window).height() - 100;
+        var w = $(window).width() - 70;
+
+        var nh = Math.floor(Math.random() * h);
+        var nw = Math.floor(Math.random() * w);
+
+        return [nh, nw]
+
+    }
+
+    function clickMe() {
+        let ghostCount = $('.ghost').length;
+        if (ghostCount === 0) {
+            $('.ghost').remove();
+            swal({
+                title: "You Win!",
+                text: "You killed the ghost!",
+                icon: "success",
+                buttons: ["Main Menu", "Play Again"],
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            }).then(function (res) {
+                if (res) {
+                    console.log('Play again');
+                    startGame();
+                } else {
+                    $('#main-Menu').show();
+                    $('#gamePlay').hide();
+                }
+            });
+        }
+        clearInterval(downloadTimer);
+        setValues();
+    }
+
+    function setValues() {
+        if (localStorage.getItem('HighScore') === null) {
+            localStorage.setItem('HighScore', timeleft);
+        } else {
+            var cuuentScore = parseInt(localStorage.getItem('HighScore'));
+            if (cuuentScore < timeleft) {
+                localStorage.setItem('HighScore', timeleft);
+            }
+        }
+        if (localStorage.getItem('coins') === null) {
+            localStorage.setItem('coins', timeleft);
+        } else {
+            var cuuentCoins = parseInt(localStorage.getItem('coins'));
+            var newCoins = cuuentCoins + timeleft;
+            localStorage.setItem('coins', newCoins);
+        }
+        inItValues();
+    }
+
+    function inItValues() {
+        var HighScore = 0;
+        var coins = 0;
+        if (localStorage.getItem('HighScore') === null) {
+            HighScore = 0;
+        } else {
+            HighScore = parseInt(localStorage.getItem('HighScore'));
+        }
+        if (localStorage.getItem('coins') === null) {
+            coins = 0;
+        } else {
+            coins = parseInt(localStorage.getItem('coins'));
+        }
+        console.log(HighScore, coins);
+        $('#__highscore').html(HighScore);
+        $('#__coin').html(coins);
+
+
+    }
+
+    function timer() {
+        document.getElementById("countdowntimer").textContent = timeleft;
+        downloadTimer = setInterval(function () {
+            timeleft--;
+            document.getElementById("countdowntimer").textContent = timeleft;
+            if (timeleft === 0) {
+                clearInterval(downloadTimer);
+                $('.ghost').remove();
+                swal({
+                    title: "You lose!",
+                    text: "You did not kill the ghost!",
+                    icon: "warning",
+                    buttons: ["Main Menu", "Play Again"],
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                }).then(function (res) {
+                    if (res) {
+                        console.log('Play again');
+                        startGame();
+                    } else {
+                        $('#main-Menu').show();
+                        $('#gamePlay').hide();
+                    }
+                });
+            }
+        }, 1000);
+    }
+
+
+    function play() {
+        var audio = document.getElementById("fire");
+        if (audio.paused === false) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+        audio.play();
+    }
+
+</script>
+</html>
