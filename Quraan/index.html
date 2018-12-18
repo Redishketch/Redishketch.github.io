@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -16,21 +17,24 @@
 
 </head>
 <body>
-<div class="header">
-    <div class="container">
-        <div class="header-content">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="website-name">
-                    <h1 class="web-text">The Nobel Quran</h1>
-                </div>
-                <div class="col-md-12">
-                    <div class="nav-bar">
-                        <ul>
-                            <li><a href="index.html">The Quran</a></li>
-                            <li><a href="#">Hadith</a></li>
-                            <li><a href="#"></a>Salah</li>
-                        </ul>
+<!--head-->
+<div class="main-Background" style="background-image: url('img/quran.jpg')">
+    <div class="inner-wrapper" id="backgroundTransperent">
+        <div class="container">
+            <div class="col-md-7">
+                <div class="web-content">
+                    <h1 class="main-text">The Nobel Quran</h1>
+                    <p class="sub-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                        and scrambled it to make a type specimen book. </p>
+                    <div class="web-btn hvr-bounce-to-right" onclick="scrol(event)">
+                        START RECITATION
                     </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-1">
+                <div class="app-content">
+                    <div class="app-logo"><img src="img/new.png" alt=""></div>
                 </div>
             </div>
         </div>
@@ -64,36 +68,40 @@
         </div>
     </div>
 </div>
-
 </body>
 <script>
     $(function () {
         $.ajax({
-            url:"https://raw.githubusercontent.com/Redishketch/quran/master/server/surahList.json",
-            type:"get",
+            url: "https://raw.githubusercontent.com/Redishketch/quran/master/server/surahList.json",
+            type: "get",
             success: function (res) {
                 res = JSON.parse(res);
-                for(var i=0;i<res.length;i++){
+                for (var i = 0; i < res.length; i++) {
                     var eachSurah = res [i];
                     var html = `<li>
-                                    <a href="surah-page.html?slug=`+eachSurah.slug+`">
-                                    <div class="col-xs-2">`+eachSurah.id+`</div>
-                                    <div class="col-xs-10">`+eachSurah.title+`</div>
+                                    <a class="hvr-underline-from-center" href="surah-page.html?slug=` + eachSurah.slug + `">
+                                    ` + eachSurah.title + `
                                     </a>
                                   </li>`;
-                    if(i<38){
+                    if (i < 38) {
                         $('._surahList1').append(html)
                     }
-                    else if(i<76){
+                    else if (i < 76) {
                         $('._surahList2').append(html)
                     }
-                    else{ $('._surahList3').append(html)}
+                    else {
+                        $('._surahList3').append(html)
+                    }
                 }
             }
         })
 
     })
+    function scrol(e) {
+        var transperent = $('#backgroundTransperent');
+        var $target = $('html,body');
+        $target.animate({scrollTop: transperent.height()+2}, 700);
+    }
 
 </script>
-
 </html>

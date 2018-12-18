@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="backgroud-blur">
+        <div class="container">
+            <div class="header-content">
+                <div class="col-sm-4">
+                    <div class="web-name">
+                        <p class="web-text">IMS MOVIES</p>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="nav-bar">
+                        <ul>
+                            <li><a href="#" onclick="movieList('2018');">Home</a></li>
+                            <li><a href="#">Generes</a>
+                                <ul class="slide-nav">
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('action');" class="a-design">Action</a>
+                                    </li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Adventure');"
+                                                             class="a-design">Adventure</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Drama');" class="a-design">Drama</a>
+                                    </li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Horror');" class="a-design">Horror</a>
+                                    </li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('science fiction');"
+                                                             class="a-design">Sci-fi</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Fantasy');" class="a-design">Fantasy</a>
+                                    </li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Comedy');" class="a-design">Comedy</a>
+                                    </li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Film Noir');"
+                                                             class="a-design">Film Noir</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('War');"
+                                                             class="a-design">War</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieListbyGenre('Western');" class="a-design">Western</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Release</a>
+                                <ul class="slide-nav">
+                                    <li class="li-design"><a href="#" onclick="movieList('2018');"
+                                                             class="a-design">2018</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2017');"
+                                                             class="a-design">2017</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2016');"
+                                                             class="a-design">2016</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2015');"
+                                                             class="a-design">2015</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2014');"
+                                                             class="a-design">2014</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2013');"
+                                                             class="a-design">2013</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2012');"
+                                                             class="a-design">2012</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2011');"
+                                                             class="a-design">2011</a></li>
+                                    <li class="li-design"><a href="#" onclick="movieList('2010');"
+                                                             class="a-design">2010</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Request</a></li>
+                            <li><a href="#">Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="search-box">
+                        <form onsubmit="movieSearch(event)">
+                            <input class="input-design" id="_input" type="text" name="search" placeholder="Type movie name...">
+                            <br>
+                            <button type="submit" class="button btn">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="loading-logo">
+                        <div id="_loading" class="loading">
+                            <div class="cssload-container">
+                                <div class="cssload-whirlpool"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="movie-box" id="movie-box1">
+
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination" id="page_no"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="f-text">This Website is made with <span><i style="color: red" class="fa fa-heart" ></i></span> by Imran.</p>
+            <p class="f-text-2">Copyright © IMS MOVIES.com All Rights Reserved</p>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="js/main.js"></script>
+</html>

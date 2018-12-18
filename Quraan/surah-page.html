@@ -21,12 +21,12 @@
         <div class="header-content">
             <div class="col-md-10 col-md-offset-1">
                 <div class="website-name">
-                    <h1 class="web-text">The Nobel Quran</h1>
+                    <h1 class="web-text"><strong>The Nobel Quran</strong></h1>
                 </div>
                 <div class="col-md-12">
                     <div class="nav-bar">
                         <ul>
-                            <li><a href="index.html">The Quran</a></li>
+                            <li><a href="sura-list.html">The Quran</a></li>
                             <li><a href="#">Hadith</a></li>
                             <li><a href="#">Salah</a></li>
                         </ul>
@@ -57,11 +57,13 @@
             </div>
         </div>
         <div class="col-md-12">
-            <button class="btn btn-default" onclick="playThisAudio(0)">Play All</button>
-            <button class="btn btn-default" onclick="stopAll()">Stop Playing</button>
+           <div class="playStop-btn">
+               <button class="btn btn-default" onclick="playThisAudio(0)">Play All</button>
+               <button class="btn btn-default" onclick="stopAll()">Stop Playing</button>
+           </div>
         </div>
         <div class="col-md-12">
-            <div class="verse verse-btn">
+            <div class="verse verse-btn ">
 
             </div>
         </div>
@@ -130,7 +132,7 @@
 
                 for (var i = 0; i < res.verses.length; i++) {
                     var eachVerse = res.verses[i];
-                    var versehtml = `<button class="btn btn-default btn-verse trigger` + i + `" onclick="playThisAudio(` + i + `)">` + (parseInt(i) + 1) + ` <audio id="play` + i + `" style="display: none;" src="` + eachVerse + `" controls></button>`;
+                    var versehtml = `<div class="btn-verse trigger` + i + `" onclick="playThisAudio(` + i + `)">` + (parseInt(i) + 1) + ` <audio id="play` + i + `" style="display: none;" src="` + eachVerse + `" controls></div>`;
                     $('.verse-btn').append(versehtml)
 
                 }
@@ -141,7 +143,7 @@
 
     function stopAll() {
         hideMusicPlayer();
-        $('.btn-verse').removeClass('btn-success').addClass('btn-default');
+        $('.btn-verse').removeClass('progress-verse').addClass('btn-verse');
         var sounds = document.getElementsByTagName('audio');
         for (i = 0; i < sounds.length; i++) {
             sounds[i].pause();
@@ -157,7 +159,7 @@
         SOUND.play();
         SOUND_ID= id;
         getAudioTime(0,0);
-        $('.trigger' + id).removeClass('btn-default').addClass('btn-success');
+        $('.trigger' + id).addClass('progress-verse');
         $("#play" + id).on("ended", function () {
             playThisAudio(id + 1);
 
